@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>个人网站</title>
+  <style>
+    /* 基础重置 & 字体 */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      background: #f9f8f6;
+      color: #2e2e2e;
+      line-height: 1.6;
+      padding: 1.5rem;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .site-wrapper {
+      max-width: 1200px;
+      width: 100%;
+      background: #ffffff;
+      border-radius: 2rem;
+      box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.1), 0 8px 24px -6px rgba(0, 0, 0, 0.05);
+      padding: 2.5rem 2rem;
+      transition: all 0.2s;
+    }
+
+    /* 头部 */
+    .site-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .site-header h1 {
+      font-size: 2.2rem;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      color: #1d1d1f;
+    }
+
+    .site-header .subhead {
+      color: #6b6b6b;
+      font-size: 1rem;
+      margin-top: 0.4rem;
+      font-weight: 400;
+    }
+
+    /* 栏目导航 (tab 切换) */
+    .nav-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 2.8rem;
+      flex-wrap: wrap;
+      border-bottom: 1px solid #eaeaea;
+      padding-bottom: 0.75rem;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      padding: 0.7rem 1.8rem;
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: #7a7a7a;
+      border-radius: 40px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      letter-spacing: 0.3px;
+      font-family: inherit;
+    }
+
+    .tab-btn:hover {
+      background: #f0efed;
+      color: #2e2e2e;
+    }
+
+    .tab-btn.active {
+      background: #1d1d1f;
+      color: #ffffff;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    }
+
+    /* 面板容器 (只显示被激活的那一个) */
+    .panels-container {
+      position: relative;
+    }
+
+    .panel {
+      display: none;
+      animation: fade 0.25s ease;
+    }
+
+    .panel.active {
+      display: block;
+    }
+
+    @keyframes fade {
+      from { opacity: 0.3; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 每个面板内部使用双栏布局(文字 + 图片) */
+    .panel-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+      align-items: start;
+    }
+
+    /* 文字区 */
+    .text-section {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .text-section h2 {
+      font-size: 1.8rem;
+      font-weight: 500;
+      color: #1d1d1f;
+      letter-spacing: -0.01em;
+      border-left: 5px solid #d4d0c8;
+      padding-left: 1rem;
+    }
+
+    .text-section p {
+      color: #3a3a3a;
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .text-section .quote {
+      font-style: italic;
+      background: #f4f3f0;
+      padding: 1rem 1.5rem;
+      border-radius: 1.2rem;
+      color: #4b4b4b;
+      border-left: 4px solid #c7c2b8;
+      font-size: 0.98rem;
+      margin: 0.8rem 0;
+    }
+
+    .meta-note {
+      font-size: 0.88rem;
+      color: #8f8f8f;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-top: 0.6rem;
+    }
+
+    /* 图片区 */
+    .image-section {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .img-card {
+      background: #f4f3f0;
+      border-radius: 1.2rem;
+      overflow: hidden;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.03);
+      transition: transform 0.2s;
+    }
+
+    .img-card:hover {
+      transform: scale(1.01);
+    }
+
+    .img-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .img-caption {
+      padding: 0.75rem 1rem;
+      font-size: 0.85rem;
+      color: #5e5e5e;
+      background: #ffffff;
+      border-top: 1px solid #efefef;
+      text-align: center;
+    }
+
+    /* 第二个图片稍微不同风格 */
+    .dual-img-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8rem;
+      margin-top: 0.5rem;
+    }
+
+    .dual-img-grid .img-card img {
+      height: 120px;
+    }
+
+    /* 响应式 */
+    @media (max-width: 780px) {
+      .site-wrapper {
+        padding: 1.8rem 1.2rem;
+      }
+
+      .panel-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .nav-tabs {
+        gap: 0.4rem;
+      }
+
+      .tab-btn {
+        padding: 0.5rem 1.2rem;
+        font-size: 0.95rem;
+      }
+
+      .site-header h1 {
+        font-size: 1.8rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 0.8rem;
+      }
+
+      .dual-img-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* 图片占位 / 真实图片用 unsplash 外链(静态可用) */
+    /* 所有图片使用真实URL，不依赖本地文件 */
+  </style>
+</head>
+<body>
+  <div class="site-wrapper">
+    <header class="site-header">
+      <h1>三时·小站</h1>
+      <div class="subhead">文字 · 影像 · 留白</div>
+    </header>
+
+    <!-- 切换栏目标签 -->
+    <div class="nav-tabs" role="tablist">
+      <button class="tab-btn active" id="tab-home" data-panel="home" role="tab" aria-selected="true">📖 首页</button>
+      <button class="tab-btn" id="tab-essay" data-panel="essay" role="tab" aria-selected="false">✍️ 随笔</button>
+      <button class="tab-btn" id="tab-gallery" data-panel="gallery" role="tab" aria-selected="false">🖼️ 影像</button>
+    </div>
+
+    <!-- 面板容器 -->
+    <div class="panels-container">
+      <!-- 首页面板 -->
+      <div class="panel active" id="panel-home" role="tabpanel" aria-labelledby="tab-home">
+        <div class="panel-content">
+          <div class="text-section">
+            <h2>欢迎来到我的角落</h2>
+            <p>这里没有宏大的叙事，只有一些安静的瞬间。我收集日常里的光、影子和一点碎碎念。</p>
+            <p>你可以自由切换上方栏目，看看我的随笔和随手拍的照片。网站是静态的，简单、纯粹，就像一张可以分享的数字明信片。</p>
+            <div class="quote">
+              “我们站着，不说话，就十分美好。” —— 顾城
+            </div>
+            <p>这个小站建立于一个平静的下午，希望它也能带给你片刻的平静。所有内容均为原创或已授权，欢迎分享链接给朋友。</p>
+            <div class="meta-note">
+              <span>🌱 始建于 2025 · 保持更新</span>
+            </div>
+          </div>
+          <div class="image-section">
+            <div class="img-card">
+              <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" alt="宁静的湖面和山" loading="lazy">
+              <div class="img-caption">湖光 · 摄于某个清晨</div>
+            </div>
+            <div class="img-card">
+              <img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" alt="雾中森林" loading="lazy">
+              <div class="img-caption">林间雾气 · 静谧</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 随笔面板 -->
+      <div class="panel" id="panel-essay" role="tabpanel" aria-labelledby="tab-essay">
+        <div class="panel-content">
+          <div class="text-section">
+            <h2>一些随想</h2>
+            <p><strong>2025.03.12</strong> —— 傍晚散步，看到玉兰开了。春天总是来得悄无声息，又铺天盖地。站在树下发了十分钟呆，觉得世界很轻。</p>
+            <p><strong>2025.02.28</strong> —— 重读《小王子》，才发现真正重要的东西，眼睛看不见。驯服与责任，玫瑰与狐狸，每一次读都有新的体会。</p>
+            <p><strong>2025.01.15</strong> —— 尝试做手冲咖啡，水温、研磨度、注水速度……像做实验。但喝到第一口干净的果酸时，一切都值得。</p>
+            <div class="quote">
+              “日子是过以后，不是过从前。” —— 无名
+            </div>
+            <p>偶尔记录，偶尔忘记。文字是抵抗遗忘的方式之一。</p>
+          </div>
+          <div class="image-section">
+            <div class="img-card">
+              <img src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" alt="书桌与咖啡" loading="lazy">
+              <div class="img-caption">书桌一角 · 写作的地方</div>
+            </div>
+            <div class="dual-img-grid">
+              <div class="img-card">
+                <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" alt="山间星空" loading="lazy">
+                <div class="img-caption">星空</div>
+              </div>
+              <div class="img-card">
+                <img src="https://images.unsplash.com/photo-1500462918059-b1a0cb512f1d?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" alt="花朵特写" loading="lazy">
+                <div class="img-caption">春日</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 影像面板 -->
+      <div class="panel" id="panel-gallery" role="tabpanel" aria-labelledby="tab-gallery">
+        <div class="panel-content">
+          <div class="text-section">
+            <h2>光影记录</h2>
+            <p>一些喜欢的瞬间，用镜头留住。大部分是旅行时拍的，也有日常的碎片。我偏爱自然的光线和安静的氛围。</p>
+            <p>照片有时比文字更直接，按下快门的瞬间，情绪和温度都在里面了。</p>
+            <div class="quote">
+              “摄影是瞬间的永恒，也是永恒的瞬间。”
+            </div>
+            <p>如果你也喜欢这些画面，可以保存或分享这个页面的链接。图片来自 Unsplash（免费可商用），我稍微挑选了一下。</p>
+            <div class="meta-note">
+              <span>📷 设备：手机 & 富士</span>
+            </div>
+          </div>
+          <div class="image-section">
+            <div class="dual-img-grid" style="margin-top: 0;">
+              <div class="img-card">
+                <img src="https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" alt="树木与天空" loading="lazy">
+                <div class="img-caption">向上生长</div>
+              </div>
+              <div class="img-card">
+                <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" alt="海滩日落" loading="lazy">
+                <div class="img-caption">海边黄昏</div>
+              </div>
+            </div>
+            <div class="img-card">
+              <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" alt="阳光穿过森林" loading="lazy">
+              <div class="img-caption">光与森林 · 丁达尔效应</div>
+            </div>
+            <div class="img-card">
+              <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3" alt="山脉与云雾" loading="lazy">
+              <div class="img-caption">远山如黛</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 页脚 (可选) -->
+    <div style="margin-top: 2.5rem; text-align: center; font-size: 0.8rem; color: #b0b0b0; border-top: 1px solid #eeeeee; padding-top: 1.5rem;">
+      ✦ 分享链接 · 留住片刻 ✦
+    </div>
+  </div>
+
+  <!-- 简单的切换脚本 -->
+  <script>
+    (function() {
+      const tabs = document.querySelectorAll('.tab-btn');
+      const panels = document.querySelectorAll('.panel');
+
+      // 切换函数
+      function switchTab(panelId) {
+        // 移除所有 active 类
+        panels.forEach(panel => {
+          panel.classList.remove('active');
+        });
+        tabs.forEach(tab => {
+          tab.classList.remove('active');
+          tab.setAttribute('aria-selected', 'false');
+        });
+
+        // 激活对应的面板和按钮
+        const targetPanel = document.getElementById('panel-' + panelId);
+        const targetTab = document.querySelector(`.tab-btn[data-panel="${panelId}"]`);
+        
+        if (targetPanel) targetPanel.classList.add('active');
+        if (targetTab) {
+          targetTab.classList.add('active');
+          targetTab.setAttribute('aria-selected', 'true');
+        }
+      }
+
+      // 绑定点击事件
+      tabs.forEach(tab => {
+        tab.addEventListener('click', (e) => {
+          const panelId = tab.dataset.panel;
+          if (panelId) switchTab(panelId);
+        });
+      });
+
+      // 可选: 通过 URL hash 支持直接跳转 (可分享到具体栏目)
+      // 例如 分享链接 #essay 自动打开随笔
+      function checkHash() {
+        const hash = window.location.hash.substring(1); // 去掉 #
+        if (hash && ['home', 'essay', 'gallery'].includes(hash)) {
+          switchTab(hash);
+        }
+      }
+
+      window.addEventListener('hashchange', checkHash);
+      // 页面加载时检查 hash
+      window.addEventListener('DOMContentLoaded', checkHash);
+      // 如果已经加载完成但 hash 存在(某些情况下)
+      if (document.readyState === 'complete') {
+        checkHash();
+      } else {
+        window.addEventListener('load', checkHash);
+      }
+    })();
+  </script>
+</body>
+</html>
